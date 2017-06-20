@@ -30,12 +30,8 @@ exports.deleteChild = function(req) {
   User.findById(req.params.userId)
   .then(user => {
     for(let i = 0; i < user.children.length; i++) {
-      console.log(user.children[i]);
-      console.log(req.params.childId);
       if(user.children[i] == req.params.childId) {
-        console.log('TRUE');
         user.children.splice(i, 1);
-        console.log(user);
         return user;
       }
     }
@@ -44,9 +40,6 @@ exports.deleteChild = function(req) {
   .catch(err => Promise.reject(err.message));
 
   return Child.findByIdAndRemove(req.params.childId)
-  .then(() => {
-
-  })
   .catch(err => Promise.reject(err.message));
 };
 
