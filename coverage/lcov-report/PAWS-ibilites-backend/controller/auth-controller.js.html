@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for PAWS-ibilites-backend/controller/auth-controller.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">PAWS-ibilites-backend/controller/</a> auth-controller.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">75.61% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>31/41</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">71.43% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>10/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">76.47% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>26/34</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+&nbsp;
+const Promise = require('bluebird');
+const User = require('../model/user');
+const createError = require('http-errors');
+&nbsp;
+module.exports = exports = {};
+&nbsp;
+exports.createUser = function(req) {
+&nbsp;
+  if(!req.body.email) return Promise.reject(createError(400, 'Email Address Required'));
+  if(!req.body.password) return Promise.reject(createError(400, 'Password Required'));
+  if(!req.body.username) return Promise.reject(createError(400, 'username Required'));
+  if(!req.body.phone) return Promise.reject(createError(400, 'phone Required'));
+&nbsp;
+&nbsp;
+  let tempPassword = req.body.password;
+  req.body.password = null;
+  delete req.body.password;
+&nbsp;
+  let newUser = new User(req.body);
+&nbsp;
+  return newUser.generatePasswordHash(tempPassword)
+    .then(user =&gt; user.save())
+    .then(user =&gt; user.generateToken())
+    .then(token =&gt;  token)
+    .catch(err =&gt; <span class="cstat-no" title="statement not covered" >Promise.reject(createError(400, err.name)))</span>;
+};
+&nbsp;
+exports.fetchUser = function(req) {
+  return User.findOne({ username: req.auth.username })
+    .then(user =&gt; {
+      if(!user) Promise.reject(createError(401, 'Unauthorized'));
+      console.log(user);
+      return user.comparePasswordHash(req.auth.password)
+      .then(user =&gt; user);
+    })
+    .catch(err =&gt; Promise.reject(createError(401, err.message)));
+};
+&nbsp;
+exports.updateUser = <span class="fstat-no" title="function not covered" >function(req) {</span>
+<span class="cstat-no" title="statement not covered" >  if(!req.params.id) <span class="cstat-no" title="statement not covered" >Promise.reject(createError(400, 'Id required'));</span></span>
+<span class="cstat-no" title="statement not covered" >  return User.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true})</span>
+  .then(data =&gt;  <span class="cstat-no" title="statement not covered" >data)</span>
+  .catch(err =&gt; <span class="cstat-no" title="statement not covered" >Promise.reject(createError(404, err.message)))</span>;
+};
+&nbsp;
+exports.deleteUser = <span class="fstat-no" title="function not covered" >function(req) {</span>
+<span class="cstat-no" title="statement not covered" >  if(!req.params.id) <span class="cstat-no" title="statement not covered" >return Promise.reject(createError(401, 'Unauthorized'));</span></span>
+<span class="cstat-no" title="statement not covered" >  return User.findByIdAndRemove(req.params.id)</span>
+  .catch(err =&gt; <span class="cstat-no" title="statement not covered" >Promise.reject(createError(400, err.name)))</span>;
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 19 2017 09:29:09 GMT-0700 (PDT)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
