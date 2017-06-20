@@ -11,7 +11,7 @@ module.exports = exports = {};
 exports.postChild = function(req){
   return new Child(req.body).save()
     .then(child => {
-      return User.findByIdAndAddChild(req.params.userId, child)
+      return User.findByIdAndAddChild(req.user._id, child)
       .then(child => child)
       .catch(err => Promise.reject(createError(400), err.message));
     })
@@ -26,7 +26,7 @@ exports.putChild = function(req) {
 };
 
 exports.deleteChild = function(req) {
-  User.findById(req.params.userId)
+  User.findById(req.user._id)
   .then(user => {
     for(let i = 0; i < user.children.length; i++) {
       if(user.children[i] == req.params.childId) {

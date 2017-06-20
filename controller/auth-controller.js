@@ -13,7 +13,6 @@ exports.createUser = function(req) {
   if(!req.body.username) return Promise.reject(createError(400, 'username Required'));
   if(!req.body.phone) return Promise.reject(createError(400, 'phone Required'));
 
-
   let tempPassword = req.body.password;
   req.body.password = null;
   delete req.body.password;
@@ -38,14 +37,12 @@ exports.fetchUser = function(req) {
 };
 
 exports.updateUser = function(req) {
-  if(!req.params.id) Promise.reject(createError(400, 'Id required'));
-  return User.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true})
+  return User.findByIdAndUpdate({ _id: req.user._id }, req.body, {new: true})
     .then(data =>  data)
     .catch(err => Promise.reject(createError(404, err.message)));
 };
 
 exports.deleteUser = function(req) {
-  if(!req.params.id) return Promise.reject(createError(401, 'Unauthorized'));
-  return User.findByIdAndRemove(req.params.id)
+  return User.findByIdAndRemove(req.user._id)
     .catch(err => Promise.reject(createError(400, err.message)));
 };
