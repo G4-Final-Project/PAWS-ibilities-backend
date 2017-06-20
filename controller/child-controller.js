@@ -36,9 +36,11 @@ exports.deleteChild = function(req) {
         console.log('TRUE');
         user.children.splice(i, 1);
         console.log(user);
+        return user;
       }
     }
   })
+  .then(user => user.save())
   .catch(err => Promise.reject(err.message));
 
   return Child.findByIdAndRemove(req.params.childId)
