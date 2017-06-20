@@ -10,7 +10,7 @@ module.exports = function(router) {
     debug('POST /signup');
 
     authCntrl.createUser(req)
-      .then(token => res.status(201).json({token:`${token}`}))
+      .then(token => res.status(201).json(token))
       .catch(err => res.status(400).send(err.message));
   });
 
@@ -22,7 +22,7 @@ module.exports = function(router) {
       .catch(err => res.status(res.status).send(err.message));
   });
 
-  router.put('/user/:id', bearerAuth, (req, res) => {
+  router.put('/user', bearerAuth, (req, res) => {
     authCntrl.updateUser(req)
       .then(data => {
         res.json(data);
@@ -31,7 +31,7 @@ module.exports = function(router) {
   });
 
 
-  router.delete('/user/:id', bearerAuth, (req, res) => {
+  router.delete('/user', bearerAuth, (req, res) => {
     authCntrl.deleteUser(req)
     .then(() => res.sendStatus(204))
     .catch(err => res.send(err.message));
