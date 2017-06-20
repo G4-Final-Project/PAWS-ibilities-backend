@@ -27,20 +27,19 @@ exports.putChild = function(req) {
 };
 
 exports.deleteChild = function(req) {
-  let chitlin = req.params.childId;
   User.findById(req.params.userId)
   .then(user => {
-    console.log(user.children);
-    console.log('chitlin:', chitlin);
-    for(let i =0; i < user.children.length; i++) {
-      console.log(user.children[i]);
-      if(user.children[i].objectId === chitlin) {
-        console.log('TRUE');
-        user.children.slice(i, 1);
+    for(let i = 0; i < user.children.length; i++) {
+      if(user.children[i] == req.params.childId) {
+        user.children.splice(i, 1);
+        return user;
       }
-    } // close loop
-    return Child.findByIdAndRemove(req.params.childId);
+    }
   })
+  .then(user => user.save())
+  .catch(err => Promise.reject(err.message));
+
+  return Child.findByIdAndRemove(req.params.childId)
   .catch(err => Promise.reject(err.message));
 };
 

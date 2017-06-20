@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const User = require('../model/user');
+const Pet = require('../model/pet');
 
 const childSchema = mongoose.Schema({
   name: {type: String, required: true},
@@ -21,4 +22,27 @@ childSchema.pre('save', function(next){
   .catch(next);
 });
 
-module.exports = mongoose.model('child', childSchema);
+const Child = module.exports = mongoose.model('child', childSchema);
+
+Child.findByIdAndAddPet = function(child, pet) {
+  let tempPet;
+  Pet.findById(pet._id)
+    .then(pet => {
+      tempPet = pet;
+    })
+    .catch(err => Promise.reject(err));
+
+  return Child.findById(child)
+    .then(child => {
+      tempPet.childId = child.id;
+      this.tempChild = child;
+      return new Pet(tempPet).save();
+    })
+    .then(pet => {
+      this.tempChild.pet = pet._id;
+      this.tempPet = pet;
+      this.tempChild.save();
+
+      return this.tempPet.save();
+    });
+};
