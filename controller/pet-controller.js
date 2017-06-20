@@ -10,6 +10,7 @@ exports.postPet = function(req) {
   let owner;
   Child.findById(req.params.childId)
     .then(child => {
+      if(child.pet.length === 1) Promise.reject(createError(400), 'You already have a pet!');
       owner = child._id;
     });
 
@@ -38,7 +39,7 @@ exports.putPet = function(req) {
 exports.deletePet = function(req) {
   return Child.findById(req.params.childId)
     .then(child => {
-      child.pet = null;
+      child.pet = [];
       return child.save();
     })
     .then(() => {

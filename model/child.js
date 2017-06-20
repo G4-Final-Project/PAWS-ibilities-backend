@@ -8,7 +8,7 @@ const childSchema = mongoose.Schema({
   phone: {type: Number, required: true},
   created: {type: Date, default: Date.now},
   userId: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
-  pet: {type: mongoose.Schema.Types.ObjectId, ref: 'pet'},
+  pet: [{type: mongoose.Schema.Types.ObjectId, ref: 'pet'}],
 });
 
 const Child = module.exports = mongoose.model('child', childSchema);
@@ -23,13 +23,12 @@ Child.findByIdAndAddPet = function(child, pet) {
 
   return Child.findById(child)
     .then(child => {
-      console.log(child);
       tempPet.childId = child.id;
       this.tempChild = child;
       return new Pet(tempPet).save();
     })
     .then(pet => {
-      this.tempChild.pet = pet._id;
+      this.tempChild.pet.push(pet._id);
       this.tempPet = pet;
       this.tempChild.save();
 
