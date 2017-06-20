@@ -7,6 +7,7 @@ const Promise = require('bluebird');
 const mongoose = require('mongoose');
 const createError = require('http-errors');
 const debug = require('debug')('slugram:user');
+const Child = require('./child');
 
 const Schema = mongoose.Schema;
 
@@ -16,7 +17,7 @@ const userSchema = Schema({
   password: {type: String, required: true},
   phone: {type: Number, required: true},
   findHash: {type: String, unique: true},
-  children:[{type: Schema.Types.ObjectId, ref: 'child' }],
+  children:[{type: Schema.Types.ObjectId, ref: 'child', unique: true}],
 });
 
 userSchema.methods.generatePasswordHash = function(password){
@@ -69,4 +70,20 @@ userSchema.methods.generateToken = function(){
   });
 };
 
-module.exports = mongoose.model('user', userSchema);
+const User = module.exports = mongoose.model('user', userSchema);
+
+User.findByIdAndAddChild = function(user, child) {
+  return User.findById(user)
+    .then(user => {
+      child.userId = user._id;
+      this.tempUser = user;
+      return new Child(child).save();
+    })
+    .then(child => {
+      this.tempUser.children.push(child._id);
+      this.tempChild = child;
+      return this.tempUser.save();
+    })
+    .then(() => this.tempChild)
+    .catch(err => Promise.reject(err));
+};

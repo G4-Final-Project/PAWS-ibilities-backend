@@ -10,6 +10,7 @@ exports.postPet = function(req) {
   let owner;
   Child.findById(req.params.childId)
     .then(child => {
+      if(child.pet.length === 1) Promise.reject(createError(400), 'You already have a pet!');
       owner = child._id;
     });
 
@@ -36,14 +37,13 @@ exports.putPet = function(req) {
 };
 
 exports.deletePet = function(req) {
-  Child.findById(req.params.id)
-  .then(child => {
-    delete child.pet;
-    return child;
-  })
-  .then(child => child.save())
-  .catch(err => Promise.reject(err.message));
-
-  return Pet.findByIdAndRemove(req.params.petId)
-  .catch(err => Promise.reject(err.message));
+  return Child.findById(req.params.childId)
+    .then(child => {
+      child.pet = [];
+      return child.save();
+    })
+    .then(() => {
+      return Pet.findByIdAndRemove(req.params.petId);
+    })
+    .catch(err => Promise.reject(err.message));
 };
