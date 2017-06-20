@@ -4,20 +4,19 @@
 
 const Child = require('../model/child');
 const User = require('../model/user');
+const createError = require('http-errors');
 
 module.exports = exports = {};
 
 exports.postChild = function(req){
-  let newChildData ={
-    userId: req.user._id,
-    name: req.body.name,
-    phone: req.body.phone,
-  };
-  return new Child(newChildData).save()
-    .then(child =>{
-      return child;
+  return new Child(req.body).save()
+    .then(child => {
+      return User.findByIdAndAddChild(req.params.userId, child)
+      .then(child => child)
+      .catch(err => Promise.reject(createError(400), err.message));
     })
-    .catch(err => Promise.reject(err.message));
+    .then(child => child)
+    .catch(err => Promise.reject(createError(400), err.message));
 };
 
 exports.putChild = function(req) {

@@ -36,14 +36,13 @@ exports.putPet = function(req) {
 };
 
 exports.deletePet = function(req) {
-  Child.findById(req.params.id)
-  .then(child => {
-    delete child.pet;
-    return child;
-  })
-  .then(child => child.save())
-  .catch(err => Promise.reject(err.message));
-
-  return Pet.findByIdAndRemove(req.params.petId)
-  .catch(err => Promise.reject(err.message));
+  return Child.findById(req.params.childId)
+    .then(child => {
+      child.pet = null;
+      return child.save();
+    })
+    .then(() => {
+      return Pet.findByIdAndRemove(req.params.petId);
+    })
+    .catch(err => Promise.reject(err.message));
 };

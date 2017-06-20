@@ -40,13 +40,12 @@ exports.fetchUser = function(req) {
 exports.updateUser = function(req) {
   if(!req.params.id) Promise.reject(createError(400, 'Id required'));
   return User.findByIdAndUpdate({ _id: req.params.id }, req.body, {new: true})
-  .then(data =>  data)
-  .catch(err => Promise.reject(createError(404, err.message)));
+    .then(data =>  data)
+    .catch(err => Promise.reject(createError(404, err.message)));
 };
 
 exports.deleteUser = function(req) {
   if(!req.params.id) return Promise.reject(createError(401, 'Unauthorized'));
   return User.findByIdAndRemove(req.params.id)
-  .catch(err => Promise.reject(createError(400, err.message)));
-
+    .catch(err => Promise.reject(createError(400, err.message)));
 };
