@@ -32,8 +32,8 @@ CodeFellows 401 JavaScipt final project RESTful API backend.
 #### Pet Create/POST Route
 /api/child/:childId/pet
 #### Pet Update/PUT Route
-/api/child/:childId/pet/:petId
+/api/child/:childId/pet
 #### Pet GET/GET Route
-/api/child/:childId/pet/:petId
+/api/child/:childId/pet
 #### Pet Delete/DELETE Route
-/api/child/:childId/pet/:petId
+/api/child/:childId/pet
