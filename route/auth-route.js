@@ -32,6 +32,7 @@ module.exports = function(router) {
 
 
   router.delete('/user', bearerAuth, (req, res) => {
+    console.log(req.user);
     authCntrl.deleteUser(req)
     .then(() => res.sendStatus(204))
     .catch(err => res.send(err.message));
