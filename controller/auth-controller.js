@@ -38,7 +38,10 @@ exports.fetchUser = function(req) {
 
 exports.updateUser = function(req) {
   return User.findByIdAndUpdate({ _id: req.user._id }, req.body, {new: true})
-    .then(data =>  data)
+    .then(data =>  {
+      console.log(data);
+      return data;
+    })
     .catch(err => Promise.reject(createError(404, err.message)));
 };
 
