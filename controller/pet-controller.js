@@ -3,6 +3,7 @@
 const Pet = require('../model/pet');
 const createError = require('http-errors');
 const Child = require('../model/child');
+const User = require('../model/user');
 
 module.exports = exports = {};
 
@@ -10,13 +11,11 @@ exports.postPet = function(req) {
   let owner;
   Child.findById(req.params.childId)
     .then(child => {
-      console.log(child);
       owner = child._id;
     });
 
   return new Pet(req.body).save()
     .then(pet => {
-      console.log('HERE');
       return Child.findByIdAndAddPet(owner, pet)
         .then(pet => pet)
         .catch(err => Promise.reject(createError(400), err.message));
@@ -36,6 +35,37 @@ exports.getPet = function(req) {
   })
   .then(pet => pet)
   .catch(err => Promise.reject(createError(400), err.message));
+};
+
+exports.getAllPets = function(req) {
+  let user;
+  let pets = [];
+  let kids = [];
+  return User.findById(req.user._id)
+    .then(found => {
+      user = found;
+      // console.log('found:',found);
+      for(let i = 0; i < user.children.length; i ++){
+        kids.push(user.children[i]);
+      }
+      return kids;
+    })
+    .then(kids => {
+      for(let i = 0; i < kids.length; i++){
+        return Child.findById(kids[i])
+          .then(kiddo => {
+            return Pet.findById(kiddo.pet[0])
+              .then(pet => {
+                pets.push(pet);
+                return pets;
+              });
+          });
+      } // CLOSE LOOP
+    })
+    .then(pets => {
+      return pets;
+    })
+    .catch(err => Promise.reject(err.message));
 };
 
 exports.putPet = function(req) {
