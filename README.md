@@ -25,6 +25,8 @@ CodeFellows 401 JavaScipt final project RESTful API backend.
 /api/child/:childId
 #### Child GET/GET Route
 /api/child/:childId
+### Child getALL/GET Route
+/api/child
 #### Child Delete/DELETE Route
 /api/child/:childId
 

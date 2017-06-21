@@ -17,6 +17,12 @@ module.exports = function(router) {
       .catch(err => res.status(err.status));
   });
 
+  router.get('/child/:childId/pet/:petId', (req, res) => {
+    return petController.getPet(req)
+      .then(pet => res.status(200).json(pet))
+      .catch(err => res.status(err.status));
+  });
+
   router.put('/child/:childId/pet/:petId', (req, res) => {
     return petController.putPet(req)
       .then(pet => res.status(200).json(pet))
