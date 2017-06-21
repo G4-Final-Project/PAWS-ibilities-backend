@@ -25,6 +25,11 @@ module.exports = function(router){
     .catch(err => res.status(err.status).send(err.message));
   });
 
+  router.get('/child', bearerAuth, (req, res) => {
+    return childController.getAllChildren(req)
+      .then(child => res.status(200).json(child));
+  });
+
   router.delete('/child/:childId', bearerAuth, (req, res) => {
     childController.deleteChild(req)
     .then(() => res.sendStatus(204))
