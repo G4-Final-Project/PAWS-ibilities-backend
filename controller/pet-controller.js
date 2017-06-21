@@ -10,12 +10,13 @@ exports.postPet = function(req) {
   let owner;
   Child.findById(req.params.childId)
     .then(child => {
-      if(child.pet.length === 1) Promise.reject(createError(400), 'You already have a pet!');
+      console.log(child);
       owner = child._id;
     });
 
   return new Pet(req.body).save()
     .then(pet => {
+      console.log('HERE');
       return Child.findByIdAndAddPet(owner, pet)
         .then(pet => pet)
         .catch(err => Promise.reject(createError(400), err.message));
@@ -25,25 +26,39 @@ exports.postPet = function(req) {
 };
 
 exports.getPet = function(req) {
-  return Pet.findById(req.params.petId)
+  let petId;
+  return Child.findById(req.params.childId)
+  .then(child => {
+    petId = child.pet[0];
+    return Pet.findById(petId)
+      .then(pet => pet)
+      .catch(err => Promise.reject(createError(400), err.message));
+  })
   .then(pet => pet)
   .catch(err => Promise.reject(createError(400), err.message));
 };
 
 exports.putPet = function(req) {
-  return Pet.findByIdAndUpdate(req.params.petId, req.body, {new: true})
+  let petId;
+  Child.findById(req.params.childId)
+  .then(child => {
+    petId = child.pet[0];
+  });
+  return Pet.findByIdAndUpdate(petId, req.body, {new: true})
     .then(pet => pet)
     .catch(err => Promise.reject(createError(400), err.message));
 };
 
 exports.deletePet = function(req) {
+  let petId;
   return Child.findById(req.params.childId)
     .then(child => {
+      petId = child.pet[0];
       child.pet = [];
       return child.save();
     })
     .then(() => {
-      return Pet.findByIdAndRemove(req.params.petId);
+      return Pet.findByIdAndRemove(petId);
     })
     .catch(err => Promise.reject(err.message));
 };
