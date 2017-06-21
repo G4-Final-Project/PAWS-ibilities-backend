@@ -10,7 +10,7 @@ module.exports = function(router) {
     debug('POST /signup');
 
     authCntrl.createUser(req)
-      .then(token => res.status(201).json(token))
+      .then(token => res.status(201).send(token))
       .catch(err => res.status(400).send(err.message));
   });
 
@@ -18,7 +18,7 @@ module.exports = function(router) {
     debug('GET /signin');
 
     authCntrl.fetchUser(req)
-      .then(token => res.status(200).json(token))
+      .then(token => res.status(200).send(token))
       .catch(err => res.status(res.status).send(err.message));
   });
 
