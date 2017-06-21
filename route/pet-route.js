@@ -22,8 +22,8 @@ module.exports = function(router) {
       .then(pet => res.status(200).json(pet))
       .catch(err => res.status(err.status));
   });
-  
-   router.put('/child/:childId/pet', (req, res) => {
+
+  router.put('/child/:childId/pet', (req, res) => {
     return petController.putPet(req)
       .then(pet => res.status(200).json(pet))
       .catch(err => res.status(err.status));
