@@ -23,6 +23,11 @@ module.exports = function(router) {
       .catch(err => res.status(err.status));
   });
 
+  router.get('/pet', bearerAuth, (req, res) => {
+    return petController.getAllPets(req)
+      .then(pet => res.status(200).json(pet));
+  });
+
   router.put('/child/:childId/pet', (req, res) => {
     return petController.putPet(req)
       .then(pet => res.status(200).json(pet))
