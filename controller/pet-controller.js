@@ -1,9 +1,25 @@
 'use strict';
-
+require('dotenv').config({path: `${__dirname}/../.env`});
 const Pet = require('../model/pet');
 const createError = require('http-errors');
 const Child = require('../model/child');
 const User = require('../model/user');
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+const client = require('twilio')(accountSid, authToken);
+
+function sendText(child) {
+  console.log(child);
+  client.messages.create({
+    to: `+${child.phone}`,
+    from: +'13603299086',
+    body: 'Fuck yes it works',
+  }, function() {
+    console.log('message.sid');
+  });
+}
 
 module.exports = exports = {};
 
@@ -11,6 +27,7 @@ exports.postPet = function(req) {
   let owner;
   Child.findById(req.params.childId)
     .then(child => {
+      sendText(child);
       owner = child._id;
     });
 
