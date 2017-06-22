@@ -4,20 +4,20 @@ const Pet = require('../model/pet');
 const createError = require('http-errors');
 const Child = require('../model/child');
 const User = require('../model/user');
+const schedule = require('node-schedule');
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+var accountSid = process.env.TWILIO_ACCOUNT_SID;
+var authToken = process.env.TWILIO_AUTH_TOKEN;
 
-const client = require('twilio')(accountSid, authToken);
+const twilio = require('twilio')(accountSid, authToken);
 
 function sendText(child) {
-  console.log(child);
-  client.messages.create({
+  twilio.messages.create({
     to: `+${child.phone}`,
     from: +'13603299086',
-    body: 'Fuck yes it works',
+    body: `"BARK BARK!" Your pet needs food. https://paw-sibilities-front.herokuapp.com/api/child/${child._id}/pet`,
   }, function() {
-    console.log('message.sid');
+    console.log('message.sent');
   });
 }
 
