@@ -70,13 +70,16 @@ exports.getAllPets = function(req) {
 
 exports.putPet = function(req) {
   let petId;
-  Child.findById(req.params.childId)
-  .then(child => {
-    petId = child.pet[0];
-  });
-  return Pet.findByIdAndUpdate(petId, req.body, {new: true})
-    .then(pet => pet)
-    .catch(err => Promise.reject(createError(400), err.message));
+  return Child.findById(req.params.childId)
+  .then(child => petId = child.pet[0])
+  .then(() => {
+    return Pet.findByIdAndUpdate(petId, req.body, {new: true})
+    .then(pet => {
+      return pet;
+    });
+  })
+  .catch(err => Promise.reject(createError(400), err.message));
+
 };
 
 exports.deletePet = function(req) {
