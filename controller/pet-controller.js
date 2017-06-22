@@ -1,41 +1,10 @@
 'use strict';
 
-require('dotenv').config({path: `${__dirname}/../.env`});
 const Pet = require('../model/pet');
 const createError = require('http-errors');
 const Child = require('../model/child');
 const User = require('../model/user');
-const schedule = require('node-schedule');
 
-var accountSid = process.env.TWILIO_ACCOUNT_SID;
-var authToken = process.env.TWILIO_AUTH_TOKEN;
-
-const twilio = require('twilio')(accountSid, authToken);
-
-function sendText(child) {
-  twilio.messages.create({
-    to: `+${child.phone}`,
-    from: +'13603299086',
-    body: `"BARK BARK!" Your pet needs food. https://paw-sibilities-front.herokuapp.com/api/child/${child._id}/pet`,
-  }, function() {
-    console.log('message.sent');
-  });
-}
-
-var accountSid = process.env.TWILIO_ACCOUNT_SID;
-var authToken = process.env.TWILIO_AUTH_TOKEN;
-
-const twilio = require('twilio')(accountSid, authToken);
-
-function sendText(child) {
-  twilio.messages.create({
-    to: `+${child.phone}`,
-    from: +'13603299086',
-    body: `"BARK BARK!" Your pet needs food. https://paw-sibilities-front.herokuapp.com/api/child/${child._id}/pet`,
-  }, function() {
-    console.log('message.sent');
-  });
-}
 
 module.exports = exports = {};
 
@@ -43,7 +12,6 @@ exports.postPet = function(req) {
   let owner;
   Child.findById(req.params.childId)
     .then(child => {
-      sendText(child);
       owner = child._id;
     });
 
