@@ -15,7 +15,7 @@ function sendText(child) {
   twilio.messages.create({
     to: `+${child.phone}`,
     from: +'13603299086',
-    body: `"BARK BARK!" Your pet needs food. https://paw-sibilities-front.herokuapp.com/api/child/${child._id}/pet`,
+    body: `"BARK BARK!" Your pet needs food. https://paw-sibilities-front.herokuapp.com/pet/${child._id}`,
   });
 }
 
@@ -32,10 +32,14 @@ exports.postPet = function(req) {
   return new Pet(req.body).save()
     .then(pet => {
       return Child.findByIdAndAddPet(owner, pet)
-        .then(pet => pet)
+        .then(pet => {
+          return pet;
+        })
         .catch(err => Promise.reject(createError(400), err.message));
     })
-    .then(pet => pet)
+    .then(pet => {
+      return pet;
+    })
     .catch(err => Promise.reject(createError(400), err.message));
 };
 

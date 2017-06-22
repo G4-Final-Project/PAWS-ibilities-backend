@@ -11,12 +11,6 @@ module.exports = function(router) {
       .catch(err => res.status(err.status));
   });
 
-  // router.get('/child/:childId/pet', bearerAuth, (req, res) => {
-  //   return petController.getPet(req)
-  //     .then(pet => res.status(200).json(pet))
-  //     .catch(err => res.status(err.status));
-  // });
-
   router.get('/child/:childId/pet', (req, res) => {
     return petController.getPet(req)
       .then(pet => res.status(200).json(pet))
