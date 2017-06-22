@@ -17,7 +17,7 @@ const userSchema = Schema({
   password: {type: String, required: true},
   phone: {type: Number, required: true},
   findHash: {type: String, unique: true},
-  children:[{type: Schema.Types.ObjectId, ref: 'child', unique: true}],
+  children:[{type: Schema.Types.ObjectId, ref: 'child'}],
 });
 
 userSchema.methods.generatePasswordHash = function(password){

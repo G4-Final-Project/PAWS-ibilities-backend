@@ -7,6 +7,7 @@ const createError = require('http-errors');
 module.exports = exports = {};
 
 exports.createUser = function(req) {
+  console.log(req.body);
 
   if(!req.body.email) return Promise.reject(createError(400, 'Email Address Required'));
   if(!req.body.password) return Promise.reject(createError(400, 'Password Required'));

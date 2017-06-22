@@ -8,7 +8,7 @@ const authCntrl = require('../controller/auth-controller');
 module.exports = function(router) {
   router.post('/user', (req, res) => {
     debug('POST /signup');
-
+    console.log('got here');
     authCntrl.createUser(req)
       .then(token => res.status(201).send(token))
       .catch(err => res.status(400).send(err.message));
