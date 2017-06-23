@@ -7,8 +7,6 @@ const createError = require('http-errors');
 module.exports = exports = {};
 
 exports.createUser = function(req) {
-  console.log(req.body);
-
   if(!req.body.email) return Promise.reject(createError(400, 'Email Address Required'));
   if(!req.body.password) return Promise.reject(createError(400, 'Password Required'));
   if(!req.body.username) return Promise.reject(createError(400, 'username Required'));
@@ -40,7 +38,6 @@ exports.fetchUser = function(req) {
 exports.updateUser = function(req) {
   return User.findByIdAndUpdate({ _id: req.user._id }, req.body, {new: true})
     .then(data =>  {
-      console.log(data);
       return data;
     })
     .catch(err => Promise.reject(createError(404, err.message)));

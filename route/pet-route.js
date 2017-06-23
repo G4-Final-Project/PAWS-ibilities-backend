@@ -19,13 +19,15 @@ module.exports = function(router) {
 
   router.get('/pet', bearerAuth, (req, res) => {
     return petController.getAllPets(req)
-      .then(pet => res.status(200).json(pet));
+      .then(pet => {
+        console.log(pet);
+        res.status(200).json(pet);
+      });
   });
 
   router.put('/child/:childId/pet', (req, res) => {
     return petController.putPet(req)
       .then(pet => {
-        console.log('this is the pet', pet);
         return res.status(200).json(pet);
       })
       .catch(err => res.status(err.status));

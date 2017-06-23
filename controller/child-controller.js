@@ -50,7 +50,6 @@ exports.getChild = function(req) {
 exports.getAllChildren = function(req) {
   return Child.find({userId: req.user._id})
   .then(children => {
-    console.log(children);
     return children;
   })
   .catch(err => Promise.reject(err.message));
