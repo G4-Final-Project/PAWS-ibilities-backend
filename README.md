@@ -1,4 +1,4 @@
-# PsudeoPet-backend
+# Psudeo-Pet-backend
 
 ### Contributers: Carlo Santos, James Thomas, Maria Lee-Reid, Patrick Sheridan
 
