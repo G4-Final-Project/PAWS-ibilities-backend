@@ -14,7 +14,7 @@ function sendText(child) {
   twilio.messages.create({
     to: `+${child.phone}`,
     from: +'13603299086',
-    body: `"BARK BARK!" Your pet needs food. https://paw-sibilities-front.herokuapp.com/#!/pet/${child._id}`,
+    body: `"BARK BARK!" Your pet needs food. https://paw-sibilites-frontend.herokuapp.com/#!/pet/${child._id}`,
   });
 }
 
