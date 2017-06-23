@@ -1,20 +1,17 @@
 'use strict';
 
-const debug = require('debug')('cfgram:auth-routes');
 const basicAuth = require('../lib/basic-auth-middleware');
 const bearerAuth = require('../lib/bearer-auth-middleware');
 const authCntrl = require('../controller/auth-controller');
 
 module.exports = function(router) {
   router.post('/user', (req, res) => {
-    debug('POST /signup');
     authCntrl.createUser(req)
       .then(token => res.status(201).send(token))
       .catch(err => res.status(400).send(err.message));
   });
 
   router.get('/user', basicAuth, (req, res) => {
-    debug('GET /signin');
 
     authCntrl.fetchUser(req)
       .then(token => res.status(200).send(token))

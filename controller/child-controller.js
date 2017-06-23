@@ -1,7 +1,5 @@
 'use strict';
 
-// const debug = require('debug')('PAWS:child-route');
-
 const Child = require('../model/child');
 const User = require('../model/user');
 const createError = require('http-errors');

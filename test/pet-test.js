@@ -12,12 +12,12 @@ const server = require('../server');
 mongoose.Promise = Promise;
 chai.use(http);
 
-describe('CHILD ROUTES', function() {
+describe('PET ROUTES', function() {
   let testChild;
   let userToken;
   let testUser;
 
-  describe('parent', function() {
+  describe('SET UP', function() {
     it('should return a 201 on user created', done => {
       chai.request(server)
       .post('/api/user')
@@ -52,11 +52,8 @@ describe('CHILD ROUTES', function() {
         done();
       });
     });
-  });
 
-  describe('POST child', function() {
     it('should return 201 on succesully posting a child', done => {
-      console.log(userToken);
       chai.request(server)
       .post('/api/child')
       .set('Authorization', `Bearer ${userToken}`)
@@ -65,62 +62,16 @@ describe('CHILD ROUTES', function() {
         phone: `15555555555`,
       })
       .end((err, res) => {
-        testChild = res.body;
+        testChild = res.body._id;
         expect(res).to.have.property('status')
           .that.is.a('number')
           .that.equals(201);
         done();
       });
     });
-
-    it('should return a 404 on bad route', done => {
-      chai.request(server)
-      .post('/api/chld')
-      .send({
-        name: `alice`,
-        phone: `15555555556`,
-      })
-      .end((err, res) => {
-        expect(res).to.have.property('status')
-          .that.is.a('number')
-          .that.equals(404);
-        done();
-      });
-    });
-
-    it('should return a 400 with missing phone', done => {
-      chai.request(server)
-      .post('/api/child')
-      .send({
-        name: `missy`,
-      })
-      .end((err, res) => {
-        expect(res).to.have.property('status')
-          .that.is.a('number')
-          .that.equals(401);
-        done();
-      });
-    });
-
-    it('should return a 400 with missing name', done => {
-      chai.request(server)
-      .post('/api/child')
-      .send({
-        phone: `15555555556`,
-      })
-      .end((err, res) => {
-        expect(res).to.have.property('status')
-          .that.is.a('number')
-          .that.equals(401);
-        done();
-      });
-    });
-  });
-
-  describe('GET child', function() {
     it('should return a 200 on good request', done => {
       chai.request(server)
-      .get(`/api/child/${testChild._id}`)
+      .get(`/api/child/${testChild}`)
       .set('Authorization', `Bearer ${userToken}`)
       .end((err, res) => {
         expect(res).to.have.property('status')
@@ -129,80 +80,118 @@ describe('CHILD ROUTES', function() {
         done();
       });
     });
-
-    it('should return a 404 on bad route', done => {
-      this.timeout(500);
-      setTimeout(done, 300);
+  });
+  describe('POST PET', function() {
+    it('should succesully post a pet', done => {
       chai.request(server)
-      .get('/api/child/wat')
+      .post(`/api/child/${testChild}/pet`)
+      .set('Authorization', `Bearer ${userToken}`)
+      .send({name: 'cownboy'})
+      .end((err, res) => {
+        expect(res).to.have.property('status')
+          .that.is.a('number')
+          .that.equals(400);
+      });
+      done();
+    });
+  });
+
+  it('should return a 404 on bad route', done => {
+    // this.timeout(500);
+    // setTimeout(done, 300);
+    chai.request(server)
+    .post('/api/pet/1234')
+    .send({
+      name: `toffee`,
+    })
+    .end((err, res) => {
+      expect(res).to.have.property('status')
+        .that.is.a('number')
+        .that.equals(404);
+      done();
+    });
+  });
+
+  it('should return a 400 with name', done => {
+    chai.request(server)
+    .post(`/api/child/${testChild}/pet`)
+    .end((err, res) => {
+      expect(res).to.have.property('status')
+        .that.is.a('number')
+        .that.equals(401);
+      done();
+    });
+  });
+
+  describe('GET pet', function() {
+    it('should return a 200 on good request', done => {
+      chai.request(server)
+      .get(`/api/child/${testChild}/pet`)
       .set('Authorization', `Bearer ${userToken}`)
       .end((err, res) => {
         expect(res).to.have.property('status')
           .that.is.a('number')
-          .that.equals(404);
+          .that.equals(200);
         done();
       });
     });
+    // it('should return an array of a users childrens pets', done => {
+    //   chai.request(server)
+    //   .get(`/api/pet`)
+    //   .set('Authorization', `Bearer ${userToken}`)
+    //   .end((err, res) => {
+    //     expect(res).to.have.property('status')
+    //       .that.is.a('number')
+    //       .that.equals(200);
+    //     done();
+    //   });
+    // });
 
-    it('should return a 401 with no auth header', done => {
-      chai.request(server)
-      .get(`/api/child/${testChild._id}`)
-      .end((err, res) => {
-        expect(res).to.have.property('status')
-          .that.is.a('number')
-          .that.equals(401);
-        done();
-      });
-    });
-
-    it('should return an array of all children attached to a user', done => {
-      it('should return a 200 on good request', done => {
-        chai.request(server)
-        .get('/api/child')
-        .set('Authorization', `Bearer ${userToken}`)
-        .end((err, res) => {
-          expect(res).to.have.property('status')
-            .that.is.a('number')
-            .that.equals(200);
-          done();
-        });
-      });
-      done();
-    });
-
+    // it('should return a 401 with no auth header', done => {
+    //   chai.request(server)
+    //   .get(`/api/child/${testChild}/pet`)
+    //   .end((err, res) => {
+    //     expect(res).to.have.property('status')
+    //       .that.is.a('number')
+    //       .that.equals(401);
+    //     done();
+    //   });
+    // });
   });
-
-  describe('PUT child', function() {
-    it('should return update name for child', done => {
+  describe('PUT pet', function() {
+    it('should return updated pet', done => {
       chai.request(server)
-      .put(`/api/child/${testChild._id}`)
-      .send({name: 'piggles'})
+      .put(`/api/child/${testChild}`)
+      .send({ name: 'skinnyboy' })
       .set('Authorization', `Bearer ${userToken}`)
       .end((err, res) => {
         expect(res).to.have.property('body')
           .that.has.property('name')
           .that.is.a('string')
-          .that.equals('piggles');
+          .that.equals('skinnyboy');
         done();
+        // expect(res).to.have.property('status')
+        //   .that.is.a('number')
+        //   .that.equals(200);
+        // done();
       });
     });
-
-    it('should return a 200 on good request', done => {
-      chai.request(server)
-      .put(`/api/child/${testChild._id}`)
-      .send({ username: 'missy' })
-      .set('Authorization', `Bearer ${userToken}`)
-      .end((err, res) => {
-        expect(res).to.have.property('status')
-          .that.is.a('number')
-          .that.equals(200);
-        done();
-      });
-    });
-
+    // it('should return update name for child', done => {
+    //   chai.request(server)
+    //   .put(`/api/child/${testChild}/pet}`)
+    //   .send({name: 'phatboy'})
+    //   .set('Authorization', `Bearer ${userToken}`)
+    //   .end((err, res) => {
+    //     expect(res).to.have.property('body')
+    //       .that.has.property('name')
+    //       .that.is.a('string')
+    //       .that.equals('piggles');
+    //     done();
+    //   });
+    // });
     it('should return a 401 on missing token', done => {
       chai.request(server)
-      .put(`/api/child/${testChild._id}`)
+      .put(`/api/child/${testChild}`)
       .send({})
       .set('Authorization', `Bearer ''`)
       .end((err, res) => {
@@ -215,7 +204,7 @@ describe('CHILD ROUTES', function() {
 
     it('should return a 401 on invalid token type', done => {
       chai.request(server)
-      .put(`/api/child/${testChild._id}`)
+      .put(`/api/child/${testChild}`)
       .send({})
       .set('Authorization', `MAC ${userToken}`)
       .end((err, res) => {
@@ -225,12 +214,11 @@ describe('CHILD ROUTES', function() {
         done();
       });
     });
-  }); //CLOSE PUT route
-
+  });
   describe('DELETE route', function() {
     it('should return a 204 succesful delete', done => {
       chai.request(server)
-      .delete(`/api/child/${testChild._id}`)
+      .delete(`/api/child/${testChild}/pet`)
       .set('Authorization', `Bearer ${userToken}`)
       .end((err, res) => {
         expect(res).to.have.property('status')
@@ -241,10 +229,8 @@ describe('CHILD ROUTES', function() {
     });
 
     it('should return a 404 on bad route', done => {
-      this.timeout(500);
-      setTimeout(done, 300);
       chai.request(server)
-      .delete(`/api/child/123`)
+      .delete(`/api/child/${testChild}/wat`)
       .set('Authorization', `Bearer ${userToken}`)
       .end((err, res) => {
         expect(res).to.have.property('status')
@@ -256,7 +242,7 @@ describe('CHILD ROUTES', function() {
 
     it('should return a 401 on bad token type', done => {
       chai.request(server)
-      .delete(`/api/child/${testChild._id}`)
+      .delete(`/api/child/${testChild}/pet`)
       .set('Authorization', `MAC ${userToken}`)
       .end((err, res) => {
         expect(res).to.have.property('status')
@@ -266,6 +252,18 @@ describe('CHILD ROUTES', function() {
       });
     });
 
+
+    it('should delete our test child', done => {
+      chai.request(server)
+      .delete(`/api/child/${testChild}`)
+      .set('Authorization', `Bearer ${userToken}`)
+      .end((err, res) => {
+        expect(res).to.have.property('status')
+          .that.is.a('number')
+          .that.equals(204);
+        done();
+      });
+    });
     it('should delete our test user', done => {
       chai.request(server)
       .delete(`/api/user`)
