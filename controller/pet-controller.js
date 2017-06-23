@@ -6,8 +6,6 @@ const createError = require('http-errors');
 const Child = require('../model/child');
 const User = require('../model/user');
 
-const accountSid = 'AC6bd554f31b65b1c6f2bedc725570fe6e';
-const authToken = '3c2079f6bf9819af9fc27c890c16a4cd';
 
 const twilio = require('twilio')(accountSid, authToken);
 
