@@ -4,7 +4,6 @@ require('dotenv').config({path: `${__dirname}/../.env`});
 const Pet = require('../model/pet');
 const createError = require('http-errors');
 const Child = require('../model/child');
-const User = require('../model/user');
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -63,7 +62,7 @@ exports.getAllPets = function(req) {
   let count = 0;
 
 
-  function DOTHISFUCKINSHIT(pets) {
+  function reducePets(pets) {
     return Child.findById(pets[count].childId)
       .then(child => {
         if(child.userId.toString() === req.user._id.toString()) {
@@ -73,12 +72,12 @@ exports.getAllPets = function(req) {
           return result;
         }
         count += 1;
-        return DOTHISFUCKINSHIT(pets);
+        return reducePets(pets);
       });
   }
   return Pet.find()
     .then(pets => {
-      return DOTHISFUCKINSHIT(pets);
+      return reducePets(pets);
     })
   .then(result => {
     if(result) {
