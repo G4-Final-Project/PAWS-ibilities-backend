@@ -6,6 +6,8 @@ const createError = require('http-errors');
 const Child = require('../model/child');
 const User = require('../model/user');
 
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const twilio = require('twilio')(accountSid, authToken);
 
