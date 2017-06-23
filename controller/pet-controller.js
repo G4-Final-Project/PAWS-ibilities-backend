@@ -6,8 +6,8 @@ const createError = require('http-errors');
 const Child = require('../model/child');
 const User = require('../model/user');
 
-const accountSid = 'AC6bd554f31b65b1c6f2bedc725570fe6e';
-const authToken = '3c2079f6bf9819af9fc27c890c16a4cd';
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const twilio = require('twilio')(accountSid, authToken);
 
@@ -70,29 +70,22 @@ exports.getAllPets = function(req) {
           result.push(pets[count]);
         }
         if(count === (pets.length - 1)) {
-          console.log(result);
           return result;
         }
         count += 1;
         return DOTHISFUCKINSHIT(pets);
       });
   }
-
-
-
   return Pet.find()
     .then(pets => {
       return DOTHISFUCKINSHIT(pets);
     })
   .then(result => {
     if(result) {
-      console.log(result);
       return result;
     }
   })
   .catch(err => Promise.reject(createError(400), err.message));
-
-
 };
 
 
