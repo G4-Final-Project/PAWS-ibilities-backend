@@ -27,7 +27,7 @@ describe('USER ROUTES', function() {
         phone: `5555555555`,
       })
       .end((err, res) => {
-
+        console.log(res.text);
         User.find('test@test.com', function(err, user) {
           testUser = user[0];
         });
@@ -169,17 +169,19 @@ describe('USER ROUTES', function() {
       });
     });
 
-    // it('should return a 401 on bad password', done => {
-    //   chai.request(server)
-    //   .get('/api/user')
-    //   .auth('tejimom', 'BADPASS')
-    //   .end((err, res) => {
-    //     expect(res).to.have.property('status')
-    //       .that.is.a('number')
-    //       .that.equals(401);
-    //     done();
-    //   });
-    // });
+    it('should return a 401 on bad password', done => {
+      this.timeout(500);
+      setTimeout(done, 300);
+      chai.request(server)
+      .get('/api/user')
+      .auth('tejimom', 'BADPASS')
+      .end((err, res) => {
+        expect(res).to.have.property('status')
+          .that.is.a('number')
+          .that.equals(401);
+        done();
+      });
+    });
 
     it('should return a 401 on missing password', done => {
       chai.request(server)
@@ -193,17 +195,19 @@ describe('USER ROUTES', function() {
       });
     });
 
-    // it('should return a 401 on invalid username in request', done => {
-    //   chai.request(server)
-    //   .get('/api/user')
-    //   .auth('nonsense', '123')
-    //   .end((err, res) => {
-    //     expect(res).to.have.property('status')
-    //       .that.is.a('number')
-    //       .that.equals(401);
-    //     done();
-    //   });
-    // });
+    it('should return a 401 on invalid username in request', done => {
+      this.timeout(500);
+      setTimeout(done, 300);
+      chai.request(server)
+      .get('/api/user')
+      .auth('nonsense', '123')
+      .end((err, res) => {
+        expect(res).to.have.property('status')
+          .that.is.a('number')
+          .that.equals(401);
+        done();
+      });
+    });
 
     it('should return a 401 on missing username in request', done => {
       chai.request(server)
@@ -219,33 +223,33 @@ describe('USER ROUTES', function() {
   }); // close GET route
 
   describe('PUT Update User data', function() {
-  //   it('should return new value for key currentWeight on good request', done => {
-  //     chai.request(server)
-  //     .put(`/api/user`)
-  //     .send({username: 'teji'})
-  //     .set('Authorization', `Bearer ${userToken}`)
-  //     .end((err, res) => {
-  //       console.log(res.body);
-  //       expect(res).to.have.property('body')
-  //         .that.has.property('username')
-  //         .that.is.a('string')
-  //         .that.equals('teji');
-  //       done();
-  //     });
-  //   });
+    it('should return new value for key currentWeight on good request', done => {
+      chai.request(server)
+      .put(`/api/user`)
+      .send({username: 'teji'})
+      .set('Authorization', `Bearer ${userToken}`)
+      .end((err, res) => {
+        console.log(res.body);
+        expect(res).to.have.property('body')
+          .that.has.property('username')
+          .that.is.a('string')
+          .that.equals('teji');
+        done();
+      });
+    });
 
-    // it('should return a 200 on good request', done => {
-    //   chai.request(server)
-    //   .put(`/api/user`)
-    //   .send({ username: 'teji' })
-    //   .set('Authorization', `Bearer ${userToken}`)
-    //   .end((err, res) => {
-    //     expect(res).to.have.property('status')
-    //       .that.is.a('number')
-    //       .that.equals(200);
-    //     done();
-    //   });
-    // });
+    it('should return a 200 on good request', done => {
+      chai.request(server)
+      .put(`/api/user`)
+      .send({ username: 'teji' })
+      .set('Authorization', `Bearer ${userToken}`)
+      .end((err, res) => {
+        expect(res).to.have.property('status')
+          .that.is.a('number')
+          .that.equals(200);
+        done();
+      });
+    });
 
     it('should return a 401 on missing token', done => {
       chai.request(server)
