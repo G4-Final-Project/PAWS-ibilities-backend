@@ -8,7 +8,6 @@ const authCntrl = require('../controller/auth-controller');
 module.exports = function(router) {
   router.post('/user', (req, res) => {
     debug('POST /signup');
-    console.log('got here');
     authCntrl.createUser(req)
       .then(token => res.status(201).send(token))
       .catch(err => res.status(400).send(err.message));
@@ -32,7 +31,6 @@ module.exports = function(router) {
 
 
   router.delete('/user', bearerAuth, (req, res) => {
-    console.log(req.user);
     authCntrl.deleteUser(req)
     .then(() => res.sendStatus(204))
     .catch(err => res.send(err.message));

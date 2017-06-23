@@ -6,8 +6,8 @@ const createError = require('http-errors');
 const Child = require('../model/child');
 const User = require('../model/user');
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const accountSid = 'AC6bd554f31b65b1c6f2bedc725570fe6e';
+const authToken = '3c2079f6bf9819af9fc27c890c16a4cd';
 
 const twilio = require('twilio')(accountSid, authToken);
 
@@ -56,36 +56,48 @@ exports.getPet = function(req) {
   .catch(err => Promise.reject(createError(400), err.message));
 };
 
+
+
 exports.getAllPets = function(req) {
-  let user;
-  let pets = [];
-  let kids = [];
-  return User.findById(req.user._id)
-    .then(found => {
-      user = found;
-      // console.log('found:',found);
-      for(let i = 0; i < user.children.length; i ++){
-        kids.push(user.children[i]);
-      }
-      return kids;
-    })
-    .then(kids => {
-      for(let i = 0; i < kids.length; i++){
-        return Child.findById(kids[i])
-          .then(kiddo => {
-            return Pet.findById(kiddo.pet[0])
-              .then(pet => {
-                pets.push(pet);
-                return pets;
-              });
-          });
-      } // CLOSE LOOP
-    })
+  let result = [];
+  let count = 0;
+
+
+  function DOTHISFUCKINSHIT(pets) {
+    return Child.findById(pets[count].childId)
+      .then(child => {
+        if(child.userId.toString() === req.user._id.toString()) {
+          result.push(pets[count]);
+        }
+        if(count === (pets.length - 1)) {
+          console.log(result);
+          return result;
+        }
+        count += 1;
+        return DOTHISFUCKINSHIT(pets);
+      });
+  }
+
+
+
+  return Pet.find()
     .then(pets => {
-      return pets;
+      return DOTHISFUCKINSHIT(pets);
     })
-    .catch(err => Promise.reject(err.message));
+  .then(result => {
+    if(result) {
+      console.log(result);
+      return result;
+    }
+  })
+  .catch(err => Promise.reject(createError(400), err.message));
+
+
 };
+
+
+
+
 
 exports.putPet = function(req) {
   let petId;
